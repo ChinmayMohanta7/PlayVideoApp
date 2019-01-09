@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "674395164593",
+    "firebase_url": "https://playvideoapp.firebaseio.com",
+    "project_id": "playvideoapp",
+    "storage_bucket": "playvideoapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:674395164593:android:64f074b035a028fd",
+        "android_client_info": {
+          "package_name": "com.mobiotics.playvideoapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "674395164593-s2bk2ke8lkmhgib3pmqdpd3qp6kuj1rc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mobiotics.playvideoapp",
+            "certificate_hash": "efeb916f66a2e16c7872c8da61584021f3db1ff8"
+          }
+        },
+        {
+          "client_id": "674395164593-0r63nbfavuat6sf3n7pujomlat0n541l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB_h2bEQJW4Vc7SLstiRCkyqdxTYGhg-Ss"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "674395164593-0r63nbfavuat6sf3n7pujomlat0n541l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
