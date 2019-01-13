@@ -15,14 +15,19 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".view.activities.MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
-        <activity android:name=".view.activities.HomeActivity" />
-        <activity android:name=".view.activities.DetailActivity"></activity>
+        <activity android:name=".view.activities.HomeActivity" >
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+        </activity>
+        <activity android:name=".view.activities.DetailActivity"
+            android:theme="@android:style/Theme.Holo.NoActionBar.Fullscreen" >
+
+        </activity>
     </application>
 
 </manifest>

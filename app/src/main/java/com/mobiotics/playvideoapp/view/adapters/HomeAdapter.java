@@ -18,6 +18,7 @@ import java.util.List;
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder> {
     private Context context;
     private List<Highlight> highlights;
+    private OnVideoClickListener listener;
 
     public HomeAdapter(Context context) {
         this.context = context;
@@ -40,9 +41,13 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
 
     }
 
+    public void setListener(OnVideoClickListener listener) {
+        this.listener = listener;
+    }
+
     @Override
     public int getItemCount() {
-        return highlights.size();
+        return highlights!=null?highlights.size():0;
     }
 
     public void setHighlights(List<Highlight> highlights) {
@@ -58,6 +63,18 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
             thumb=itemView.findViewById(R.id.thumbnail);
             title=itemView.findViewById(R.id.title);
             desc=itemView.findViewById(R.id.desc);
+            thumb.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (listener!=null){
+                        listener.onVideoClicked(highlights.get(getAdapterPosition()),getAdapterPosition());
+                    }
+                }
+            });
         }
+    }
+
+    public interface OnVideoClickListener{
+        void onVideoClicked(Highlight highlight,int position);
     }
 }

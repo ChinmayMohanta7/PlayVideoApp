@@ -1,5 +1,6 @@
 package com.mobiotics.playvideoapp.view.activities;
 
+import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,7 +18,7 @@ import com.mobiotics.playvideoapp.view.customview.SpaceItemDecoration;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeActivity extends AppCompatActivity implements HighlightAsyncTask.OnSavedListener,SwipeRefreshLayout.OnRefreshListener {
+public class HomeActivity extends AppCompatActivity implements HighlightAsyncTask.OnSavedListener,SwipeRefreshLayout.OnRefreshListener,HomeAdapter.OnVideoClickListener {
 
     private RecyclerView recyclerView;
     private HomeAdapter adapter;
@@ -32,6 +33,7 @@ public class HomeActivity extends AppCompatActivity implements HighlightAsyncTas
         recyclerView=findViewById(R.id.recyclerview);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter=new HomeAdapter(this);
+        adapter.setListener(this);
         recyclerView.addItemDecoration(new SpaceItemDecoration(20,true,true));
         swipeRefreshLayout.setOnRefreshListener(this);
         new HighlightAsyncTask(this).execute();
@@ -49,5 +51,13 @@ public class HomeActivity extends AppCompatActivity implements HighlightAsyncTas
     @Override
     public void onRefresh() {
         new HighlightAsyncTask(this).execute();
+    }
+
+    @Override
+    public void onVideoClicked(Highlight highlight,int position) {
+        Intent intent=new Intent(this,DetailActivity.class);
+        intent.putExtra("highlight",highlight);
+        intent.putExtra("position",position);
+        startActivity(intent);
     }
 }
