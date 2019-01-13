@@ -119,7 +119,7 @@ public class DetailActivity extends AppCompatActivity implements HomeVideoListAd
                         break;
                     case Player.STATE_ENDED:
                         progressBar.setVisibility(View.GONE);
-                        highlights.get(position).setDuration(0);
+                        DBHelper.getInstance().setHighlightLastDuration(position,0);
                         position++;
                         playNextVideo();
                         break;
@@ -190,7 +190,7 @@ public class DetailActivity extends AppCompatActivity implements HomeVideoListAd
 
     @Override
     public void onHighlightCLicked(Highlight highlight, int position) {
-        highlights.get(this.position).setDuration(exoPlayer.getDuration());
+        DBHelper.getInstance().setHighlightLastDuration(this.position,exoPlayer.getDuration());
         this.position=position;
         playNextVideo();
         Toast.makeText(this,highlight.getTitle(),Toast.LENGTH_SHORT).show();

@@ -37,4 +37,11 @@ public class DBHelper {
     public List<Highlight> getHighlights(){
         return realm.where(Highlight.class).findAll();
     }
+
+    public void setHighlightLastDuration(int position,long duration){
+        realm.beginTransaction();
+        Highlight highlight=getHighlights().get(position);
+        highlight.setDuration(duration);
+        realm.commitTransaction();
+    }
 }
