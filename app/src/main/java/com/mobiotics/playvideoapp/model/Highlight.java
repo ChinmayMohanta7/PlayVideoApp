@@ -10,6 +10,7 @@ public class Highlight extends RealmObject implements Parcelable {
     @PrimaryKey
     private String id;
     private String title,description, thumb, url;
+    private long duration;
 
     public Highlight() {
     }
@@ -20,6 +21,7 @@ public class Highlight extends RealmObject implements Parcelable {
         description = in.readString();
         thumb = in.readString();
         url = in.readString();
+        duration=in.readLong();
     }
 
     public static final Creator<Highlight> CREATOR = new Creator<Highlight>() {
@@ -74,6 +76,14 @@ public class Highlight extends RealmObject implements Parcelable {
         this.url = url;
     }
 
+    public long getDuration() {
+        return duration;
+    }
+
+    public void setDuration(long duration) {
+        this.duration = duration;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -86,6 +96,6 @@ public class Highlight extends RealmObject implements Parcelable {
         dest.writeString(description);
         dest.writeString(thumb);
         dest.writeString(url);
-
+        dest.writeLong(duration);
     }
 }

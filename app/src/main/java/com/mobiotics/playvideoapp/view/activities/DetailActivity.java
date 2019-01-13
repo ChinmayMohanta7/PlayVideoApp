@@ -1,11 +1,15 @@
 package com.mobiotics.playvideoapp.view.activities;
 
+import android.app.ActionBar;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlaybackException;
@@ -19,6 +23,7 @@ import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.extractor.ExtractorsFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.source.MediaPeriod;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
@@ -35,19 +40,14 @@ import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.mobiotics.playvideoapp.R;
 import com.mobiotics.playvideoapp.model.Highlight;
 import com.mobiotics.playvideoapp.model.repository.DBHelper;
+import com.mobiotics.playvideoapp.view.adapters.HomeVideoListAdapter;
 
 import java.util.List;
 
-public class DetailActivity extends AppCompatActivity {
+public class DetailActivity extends AppCompatActivity implements HomeVideoListAdapter.OnHighlightClickLitener {
 
-    private SimpleExoPlayer player;
     private PlayerView videoView;
-    private DataSource.Factory mDataSourceFactory;
-    private DataSource.Factory mFactory;
-    private AdaptiveTrackSelection.Factory mAdaptiveTrackSelectionFactory;
-    private TrackSelector mTrackSelector;
     private LoadControl mLoadControl;
-    private DefaultBandwidthMeter mBandwidthMeter;
     private ProgressBar progressBar;
     private Uri videoURI;
     private SimpleExoPlayer exoPlayer;
@@ -56,27 +56,31 @@ public class DetailActivity extends AppCompatActivity {
     private int position;
     private ExtractorsFactory extractorsFactory;
     private RecyclerView recyclerView;
+    private List<Highlight> highlights;
+    private HomeVideoListAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_detail);
 
         progressBar=findViewById(R.id.amPrgbrLoading);
         recyclerView=findViewById(R.id.video_list);
 
+        highlights=DBHelper.getInstance().getHighlights();
+        adapter=new HomeVideoListAdapter(this,highlights,position);
+        adapter.setLitener(this);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
+        recyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
+
         Highlight highlight=getIntent().getParcelableExtra("highlight");
         position=getIntent().getIntExtra("position",0);
         videoView=findViewById(R.id.video_view);
-        mAdaptiveTrackSelectionFactory = new AdaptiveTrackSelection.Factory(mBandwidthMeter);
-        mTrackSelector = new DefaultTrackSelector(mAdaptiveTrackSelectionFactory);
 
         mLoadControl = new DefaultLoadControl();
         extractorsFactory = new DefaultExtractorsFactory();
 
-        /*videoView.setPlayer(player);
-        MediaSource video=new ExtractorMediaSource(Uri.parse(highlight.getUrl()),mDataSourceFactory,extractorsFactory,null,null);
-        player.prepare(video);
-        player.setPlayWhenReady(true);*/
         BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
         TrackSelector trackSelector = new DefaultTrackSelector(new AdaptiveTrackSelection.Factory(bandwidthMeter));
         exoPlayer = ExoPlayerFactory.newSimpleInstance(this, trackSelector);
@@ -89,9 +93,11 @@ public class DetailActivity extends AppCompatActivity {
         videoView.setPlayer(exoPlayer);
         exoPlayer.prepare(mediaSource);
         exoPlayer.setPlayWhenReady(true);
+
         exoPlayer.addListener(new Player.EventListener() {
             @Override
             public void onTimelineChanged(Timeline timeline, Object manifest, int reason) {
+
 
             }
 
@@ -113,6 +119,8 @@ public class DetailActivity extends AppCompatActivity {
                         break;
                     case Player.STATE_ENDED:
                         progressBar.setVisibility(View.GONE);
+                        highlights.get(position).setDuration(0);
+                        position++;
                         playNextVideo();
                         break;
                     default:
@@ -157,10 +165,9 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void playNextVideo() {
-        List<Highlight> highlights=DBHelper.getInstance().getHighlights();
-        if (position<highlights.size()-1){
-            videoURI=Uri.parse(highlights.get(position+1).getUrl());
-            position++;
+        recyclerView.scrollToPosition(position);
+        if (position<highlights.size()){
+            videoURI=Uri.parse(highlights.get(position).getUrl());
         }else {
             videoURI=Uri.parse(highlights.get(0).getUrl());
             position=0;
@@ -168,6 +175,7 @@ public class DetailActivity extends AppCompatActivity {
 
         mediaSource = new ExtractorMediaSource(videoURI, dataSourceFactory, extractorsFactory, null, null);
         exoPlayer.prepare(mediaSource);
+        exoPlayer.seekTo(highlights.get(position).getDuration());
         exoPlayer.setPlayWhenReady(true);
     }
 
@@ -178,5 +186,13 @@ public class DetailActivity extends AppCompatActivity {
             exoPlayer.stop();
             exoPlayer.release();
         }
+    }
+
+    @Override
+    public void onHighlightCLicked(Highlight highlight, int position) {
+        highlights.get(this.position).setDuration(exoPlayer.getDuration());
+        this.position=position;
+        playNextVideo();
+        Toast.makeText(this,highlight.getTitle(),Toast.LENGTH_SHORT).show();
     }
 }
