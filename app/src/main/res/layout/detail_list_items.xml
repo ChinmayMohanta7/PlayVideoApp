@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/containerView"
-    android:background="">
+    android:background="@drawable/selected_item_bg">
 
     <ImageView
         android:layout_width="100dp"
