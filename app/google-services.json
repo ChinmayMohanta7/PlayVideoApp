@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "674395164593-2rke890sel6eagbnpf26odrhbetdgmqf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mobiotics.playvideoapp",
+            "certificate_hash": "ef4a4e3413166f42f7fa056f522fe7c8ea498a30"
+          }
+        },
+        {
           "client_id": "674395164593-0r63nbfavuat6sf3n7pujomlat0n541l.apps.googleusercontent.com",
           "client_type": 3
         }

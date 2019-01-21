@@ -68,6 +68,7 @@ public class DetailActivity extends AppCompatActivity implements HomeVideoListAd
         recyclerView=findViewById(R.id.video_list);
 
         highlights=DBHelper.getInstance().getHighlights();
+        position=getIntent().getIntExtra("position",0);
         adapter=new HomeVideoListAdapter(this,highlights,position);
         adapter.setLitener(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -172,7 +173,9 @@ public class DetailActivity extends AppCompatActivity implements HomeVideoListAd
             videoURI=Uri.parse(highlights.get(0).getUrl());
             position=0;
         }
-
+        adapter=new HomeVideoListAdapter(this,highlights,position);
+        adapter.setLitener(this);
+        recyclerView.setAdapter(adapter);
         mediaSource = new ExtractorMediaSource(videoURI, dataSourceFactory, extractorsFactory, null, null);
         exoPlayer.prepare(mediaSource);
         exoPlayer.seekTo(highlights.get(position).getDuration());
@@ -193,6 +196,6 @@ public class DetailActivity extends AppCompatActivity implements HomeVideoListAd
         DBHelper.getInstance().setHighlightLastDuration(this.position,exoPlayer.getDuration());
         this.position=position;
         playNextVideo();
-        Toast.makeText(this,highlight.getTitle(),Toast.LENGTH_SHORT).show();
+
     }
 }
