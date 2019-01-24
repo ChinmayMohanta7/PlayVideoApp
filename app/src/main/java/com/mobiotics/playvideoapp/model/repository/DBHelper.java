@@ -44,4 +44,9 @@ public class DBHelper {
         highlight.setDuration(duration);
         realm.commitTransaction();
     }
+
+    public long getHighlightLastPlayDuration(int position){
+        Highlight highlight=getHighlights().get(position);
+        return highlight.getDuration();
+    }
 }

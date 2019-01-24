@@ -189,7 +189,7 @@ public class DetailActivity extends AppCompatActivity implements HomeVideoListAd
     @Override
     public void onHighlightCLicked(Highlight highlight, int position) {
         //adapter.setSelectedPosition(position);
-        DBHelper.getInstance().setHighlightLastDuration(this.position,exoPlayer.getDuration());
+        DBHelper.getInstance().setHighlightLastDuration(this.position,exoPlayer.getCurrentPosition());
         this.position=position;
         playNextVideo();
 

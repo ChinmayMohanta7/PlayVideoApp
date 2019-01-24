@@ -39,7 +39,8 @@ public class HomeVideoListAdapter extends RecyclerView.Adapter<HomeVideoListAdap
     @Override
     public void onBindViewHolder(@NonNull HighlightViewHolder viewHolder, int position) {
         Highlight highlight=highlights.get(position);
-        Picasso.get().load(Uri.parse(highlight.getUrl()))
+
+        Picasso.get().load(highlight.getThumb())
                 .into(viewHolder.thumbnail);
         viewHolder.title.setText(highlight.getTitle());
         viewHolder.desc.setText(highlight.getDescription());
