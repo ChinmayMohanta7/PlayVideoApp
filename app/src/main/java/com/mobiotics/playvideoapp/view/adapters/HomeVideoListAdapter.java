@@ -63,6 +63,11 @@ public class HomeVideoListAdapter extends RecyclerView.Adapter<HomeVideoListAdap
         this.litener = litener;
     }
 
+    public void setSelectedPosition(int lastCheckedPosition) {
+        this.lastCheckedPosition = lastCheckedPosition;
+        notifyDataSetChanged();
+    }
+
     public class HighlightViewHolder extends RecyclerView.ViewHolder{
 
         private ImageView thumbnail;
@@ -81,7 +86,8 @@ public class HomeVideoListAdapter extends RecyclerView.Adapter<HomeVideoListAdap
                     if (litener!=null){
                         litener.onHighlightCLicked(highlights.get(getAdapterPosition()),getAdapterPosition());
                         lastCheckedPosition = getAdapterPosition();
-
+                        notifyDataSetChanged();
+                        notifyItemChanged(getAdapterPosition());
                     }
                 }
             });

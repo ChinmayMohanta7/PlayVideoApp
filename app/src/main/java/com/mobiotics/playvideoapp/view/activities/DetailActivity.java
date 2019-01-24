@@ -1,6 +1,5 @@
 package com.mobiotics.playvideoapp.view.activities;
 
-import android.app.ActionBar;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,11 +8,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlaybackException;
-import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.LoadControl;
 import com.google.android.exoplayer2.PlaybackParameters;
@@ -23,18 +20,14 @@ import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.extractor.ExtractorsFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
-import com.google.android.exoplayer2.source.MediaPeriod;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.TrackGroupArray;
-import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.PlayerView;
-import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.BandwidthMeter;
-import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.mobiotics.playvideoapp.R;
@@ -122,6 +115,7 @@ public class DetailActivity extends AppCompatActivity implements HomeVideoListAd
                         progressBar.setVisibility(View.GONE);
                         DBHelper.getInstance().setHighlightLastDuration(position,0);
                         position++;
+                        adapter.setSelectedPosition(position);
                         playNextVideo();
                         break;
                     default:
@@ -173,9 +167,10 @@ public class DetailActivity extends AppCompatActivity implements HomeVideoListAd
             videoURI=Uri.parse(highlights.get(0).getUrl());
             position=0;
         }
-        adapter=new HomeVideoListAdapter(this,highlights,position);
-        adapter.setLitener(this);
-        recyclerView.setAdapter(adapter);
+
+        //adapter=new HomeVideoListAdapter(this,highlights,position);
+        ////adapter.setLitener(this);
+        //recyclerView.setAdapter(adapter);
         mediaSource = new ExtractorMediaSource(videoURI, dataSourceFactory, extractorsFactory, null, null);
         exoPlayer.prepare(mediaSource);
         exoPlayer.seekTo(highlights.get(position).getDuration());
@@ -193,6 +188,7 @@ public class DetailActivity extends AppCompatActivity implements HomeVideoListAd
 
     @Override
     public void onHighlightCLicked(Highlight highlight, int position) {
+        //adapter.setSelectedPosition(position);
         DBHelper.getInstance().setHighlightLastDuration(this.position,exoPlayer.getDuration());
         this.position=position;
         playNextVideo();
